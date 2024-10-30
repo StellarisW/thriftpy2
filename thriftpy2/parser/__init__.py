@@ -41,12 +41,15 @@ def load(path,
     # add sub modules to sys.modules recursively
     if real_module:
         sys.modules[module_name] = thrift
-        sub_modules = thrift.__thrift_meta__["includes"][:]
-        while sub_modules:
-            module = sub_modules.pop()
-            if module not in sys.modules:
-                sys.modules[module.__name__] = module
-                sub_modules.extend(module.__thrift_meta__["includes"])
+        include_thrifts = thrift.__thrift_meta__["includes"][:]
+        while include_thrifts:
+            include_thrift = include_thrifts.pop()
+            sub_modules = thrift.__thrift_meta__["sub_modules"][:]
+            for module in sub_modules:
+                if module not in sys.modules:
+                    sys.modules[module] = module
+            if include_thrift.__name__ not in sys.modules:
+                include_thrifts.extend(include_thrift.__thrift_meta__["includes"])
     return thrift
 
 

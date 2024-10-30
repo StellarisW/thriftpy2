@@ -62,9 +62,18 @@ def p_include(p):
     for include_dir in replace_include_dirs:
         path = os.path.join(include_dir, p[2])
         if os.path.exists(path):
+            child_path = os.path.normpath(
+                os.path.dirname(str(thrift.__name__).rstrip("_thrift").replace(".", "/")) + "/" + p[2])
+
+            child_module_name = str(
+                child_path).replace("/",
+                                    ".").replace(
+                ".thrift", "_thrift")
+
             child = parse(path)
             setattr(thrift, child.__name__, child)
             _add_thrift_meta('includes', child)
+            _add_thrift_meta('sub_modules', types.ModuleType(child_module_name))
             return
     raise ThriftParserError(('Couldn\'t include thrift %s in any '
                              'directories provided') % p[2])
