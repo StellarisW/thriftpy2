@@ -65,6 +65,8 @@ def p_include(p):
             child_path = os.path.normpath(
                 os.path.dirname(str(thrift.__name__).rstrip("_thrift").replace(".", "/")) + "/" + p[2])
 
+            child_path = child_path.lstrip("/")
+
             child_module_name = str(
                 child_path).replace("/",
                                     ".").replace(
