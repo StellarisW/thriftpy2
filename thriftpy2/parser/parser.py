@@ -63,12 +63,12 @@ def p_include(p):
         path = os.path.join(include_dir, p[2])
         if os.path.exists(path):
             child_path = os.path.normpath(
-                os.path.dirname(remove_suffix(str(thrift.__name__), "_thrift").replace(".", "/")) + "/" + p[2])
+                os.path.dirname(remove_suffix(str(thrift.__name__), "_thrift").replace(".", os.sep)) + os.sep + p[2])
 
-            child_path = child_path.lstrip("/")
+            child_path = child_path.lstrip(os.sep)
 
             child_module_name = str(
-                child_path).replace("/",
+                child_path).replace(os.sep,
                                     ".").replace(
                 ".thrift", "_thrift")
 
