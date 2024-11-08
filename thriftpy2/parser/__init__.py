@@ -171,7 +171,7 @@ def get_definition(thrift, name, lineno):
 def load_fp(source, module_name):
     """Load thrift file like object as a module.
     """
-    thrift = parse_fp(source, module_name)
+    thrift = parse_fp(source, module_name, enable_cache=False)
     sys.modules[module_name] = thrift
     return thrift
 
