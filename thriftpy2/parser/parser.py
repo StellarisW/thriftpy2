@@ -63,7 +63,7 @@ def p_include(p):
         path = os.path.join(include_dir, p[2])
         if os.path.exists(path):
             child_path = os.path.normpath(
-                os.path.dirname(remove_suffix(str(thrift.__name__), "_thrift").replace(".", os.sep)) + os.sep + p[2])
+                os.path.dirname(str(thrift.__name__).replace("_thrift", "").replace(".", os.sep)) + os.sep + p[2])
 
             child_path = child_path.lstrip(os.sep)
 
@@ -73,7 +73,7 @@ def p_include(p):
                 ".thrift", "_thrift")
 
             child = parse(path, module_name=child_module_name)
-            setattr(thrift, remove_suffix(child.__name__, "_thrift"), child)
+            setattr(thrift, str(child.__name__).replace("_thrift", ""), child)
             _add_thrift_meta('includes', child)
             _add_thrift_meta('sub_modules', types.ModuleType(child_module_name))
             return
@@ -960,8 +960,3 @@ def _get_ttype(inst, default_ttype=None):
     if hasattr(inst, '__dict__') and '_ttype' in inst.__dict__:
         return inst.__dict__['_ttype']
     return default_ttype
-
-def remove_suffix(s, suffix):
-    if s.endswith(suffix):
-        return s[:-len(suffix)]
-    return s

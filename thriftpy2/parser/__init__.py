@@ -44,10 +44,11 @@ def load(path,
         include_thrifts = thrift.__thrift_meta__["includes"][:]
         while include_thrifts:
             include_thrift = include_thrifts.pop()
-            sub_modules = thrift.__thrift_meta__["sub_modules"][:]
-            for module in sub_modules:
-                if module not in sys.modules:
-                    sys.modules[module.__name__] = include_thrift
+            lost_sub_modules = [
+                m for m in thrift.__thrift_meata__["sub_modules"] if m not in sys.modules
+            ]
+            for module in lost_sub_modules:
+                sys.modules[module.__name__] = include_thrift
             if include_thrift.__name__ not in sys.modules:
                 include_thrifts.extend(include_thrift.__thrift_meta__["includes"])
     return thrift
