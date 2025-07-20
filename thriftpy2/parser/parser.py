@@ -423,6 +423,9 @@ def p_ref_type(p):
             included_ref_type = getattr(ref_type, attr)
             resolved_ref_type = getattr(included_ref_type, name, None)
             if resolved_ref_type is not None:
+                if isinstance(resolved_ref_type, tuple):
+                    # typedef a ttype from other thrift file
+                    setattr(resolved_ref_type[1], 'included_module', str(ref_type))
                 ref_type = resolved_ref_type
                 break
     else:
