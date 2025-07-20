@@ -10,10 +10,6 @@ class ThriftParserError(Exception):
     pass
 
 
-class ThriftModuleNameConflict(ThriftParserError):
-    pass
-
-
 class ThriftLexerError(ThriftParserError):
     pass
 
