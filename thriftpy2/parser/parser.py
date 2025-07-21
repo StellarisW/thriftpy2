@@ -425,7 +425,10 @@ def p_ref_type(p):
             if resolved_ref_type is not None:
                 if isinstance(resolved_ref_type, tuple):
                     # typedef a ttype from other thrift file
-                    setattr(resolved_ref_type[1], 'included_module', str(ref_type))
+                    if not hasattr(ref_type, '__typedefs__'):
+                        ref_type.__typedefs__ = dict()
+                    ref_type.__typedefs__[resolved_ref_type[1].__module__ + '.' + resolved_ref_type[
+                        1].__qualname__] = "%s.%s" % (str(included_ref_type.__name__), name)
                 ref_type = resolved_ref_type
                 break
     else:
